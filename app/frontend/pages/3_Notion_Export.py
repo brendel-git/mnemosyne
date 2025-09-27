@@ -1,6 +1,6 @@
 import streamlit as st
 from utils import load_env_vars
-from notion_client import NotionClientWrapper
+from notion_wrapper import NotionClientWrapper
 
 st.title("📒 Export to Notion")
 
