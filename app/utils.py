@@ -6,6 +6,7 @@ def load_env_vars():
     load_dotenv()
     cfg = {
         "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+        "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
         "NOTION_API_KEY": os.getenv("NOTION_API_KEY"),
         "NOTION_DB_ID": os.getenv("NOTION_DB_ID"),
         "AZURE_VISION_ENDPOINT": os.getenv("AZURE_VISION_ENDPOINT"),
