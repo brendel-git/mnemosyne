@@ -3,39 +3,52 @@ from summarizer import summarize_text_gemini
 from notion_wrapper import NotionClientWrapper
 from utils import load_env_vars
 
-from summarizer import summarize_text_gemini
-
-
 
 def main():
     cfg = load_env_vars()
 
-
+    # -----------------------
+    # 1. Test summarizer only
+    # -----------------------
     sample_text = """
     Mnemosyne is the Greek goddess of memory. In this project, screenshots are
     processed into structured notes using OCR, summarized with Gemini AI, and stored in Notion.
     """
-
-    print("=== Original Text ===")
+    print("=== Sample Text ===")
     print(sample_text)
 
+    gemini_summary = summarize_text_gemini(sample_text)
     print("\n=== Gemini Summary ===")
-    print(summarize_text_gemini(sample_text))
+    print(gemini_summary)
 
-    # Test OCR
-    text = extract_text_from_image("data/sample_screenshot.png")
-    print("=== OCR RESULT ===")
-    print(text)
+    # -----------------------
+    # 2. Test OCR
+    # -----------------------
+    try:
+        text = extract_text_from_image("data/sample_screenshot.png")
+        print("\n=== OCR RESULT ===")
+        print(text)
+    except Exception as e:
+        print("\n⚠️ OCR test skipped or failed:", e)
+        text = sample_text  # fallback so pipeline still works
 
-    # Test summarizer
+    # -----------------------
+    # 3. Test summarizer on OCR output
+    # -----------------------
     summary = summarize_text_gemini(text)
-    print("\n=== SUMMARY ===")
+    print("\n=== OCR Summary ===")
     print(summary)
 
-    # Test Notion save
-    notion = NotionClientWrapper(cfg["NOTION_API_KEY"], cfg["NOTION_DB_ID"])
-    notion.add_entry("Test Entry", summary)
-    print("\n✅ Saved to Notion!")
+    # -----------------------
+    # 4. Test Notion Connection
+    # -----------------------
+    try:
+        notion = NotionClientWrapper(cfg["NOTION_API_KEY"], cfg["NOTION_DB_ID"])
+        notion.add_entry("Test Entry", summary)
+        print("\n✅ Successfully saved to Notion!")
+    except Exception as e:
+        print("\n❌ Notion connection failed:", e)
+
 
 if __name__ == "__main__":
     main()
