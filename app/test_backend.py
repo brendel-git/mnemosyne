@@ -21,6 +21,8 @@ def main():
     print("\n=== Gemini Summary ===")
     print(gemini_summary)
 
+
+
     # -----------------------
     # 2. Test OCR
     # -----------------------
